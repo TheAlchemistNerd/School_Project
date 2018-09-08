@@ -9,121 +9,45 @@ using namespace std;
 
 class Login
 {
-    int choice;
-    int confirmation;
-    string username, password, password2;
+    public:
+    char username[10], password[10];
 
-void write_to_file(string username)
-{
-    ofstream writefile;
-    string file = username+".txt";
-    writefile.open(file.c_str(), ios::out);
-    cin.clear();
-    writefile << password<<';';
-    writefile.close();
-    system("cls");
-    mainmenu();
-    writefile.close();
+}log1,log2;
+
+int login()
+{   cout << "\t\t\t Login Panel" << endl;
+    cout << "Enter username: ";
+    cin.getline(log1.username,10);
+    cout << "Enter password: ";
+    cin.getline(log1.password,10);
+    ifstream fin ("db", ios::binary | ios::in);
+    int i=0;
+    while(!fin.eof())
+    {
+        fin.read((char*)&log2 , sizeof(Login));
+        if (strcmp(log1.username,log2.username) && strcmp(log1.password,log2.password))
+        {
+            cout << "Logged in" << endl;
+            i=1;
+            break;
+        }
+
+    }
+    fin.close();
+    if(!i)
+        cout << "Wrong Credentials";
+    return i;
 }
-void get_from_file(string username)
-{
-    ifstream getfile;
-    string file = username+".txt";
-    getfile.open(file.c_str());
-    cin.clear();
-    if (!getfile)
-    {
-        cout << "Wrong username"<<endl;
-        mainmenu();
-    }
-    getfile.getline((char*)&password2,15,';');
-    getfile.close();
-
+void signup()
+{   cout << "\t\t\t Signup Panel" << endl;
+    cout << "Enter username: ";
+    cin.getline(log1.username,10);
+    cout << "Enter password: ";
+    cin.getline(log1.password,10);
+    ofstream fout ("db", ios::binary | ios::app);
+    fout.write((char*)&log1 , sizeof(Login));
+    fout.close();
 }
-void login()
-{
-    cout << "Enter the username: "; getchar(); getline(cin, username);
-    cin.clear();
-    get_from_file(username);
-    cout << "Please enter the password: "; getchar(); cin >> password;
-    cin.clear();
-    if (password == password2)
-    {
-        cin.clear();
-        cout << "You are being logged in!";
-    }
-    else
-    {
-        cout << "Sorry invalid" << endl;
-        mainmenu();
-    }
-
-}
-
-
-void registerpassword()
-{
-    cout << "Please enter the password:" << endl;
-    cin >> password;
-    cout << "Please renter your password:" << endl;
-    cin >> password2;
-    if (password == password2)
-    {
-        cin.clear();
-        write_to_file(username);
-        mainmenu();
-    }
-    else
-    {
-        cout << "Sorry invalid" << endl;
-        registerpassword();
-    }
-}
-
-
-void registerme()
-{
-    cout << "Please enter your username: " << endl;
-    getchar();
-    getline(cin, username);
-    cout << "\nUsername: "<< username
-         << "\nConfirm? \n\n"
-         << "[1] Yes\n"
-         << "[2] No" << endl;
-    cin >> confirmation;
-    if (confirmation == 1)
-    {
-        registerpassword();
-    }
-
-    else
-    {
-        cout << "Sorry invalid input, Please try again" << endl;
-        cin.clear();
-        registerme();
-    }
-}
-public:
-void mainmenu()
-{   cout << "Hello, Would you like to log in or register\n"
-         << "[1] Login\n"
-         << "[2] Register\n"
-         <<endl;
-    cin >> choice;
-    switch(choice)
-    {
-            case 1:
-                    login();
-                    break;
-
-            case 2:
-                    registerme();
-                    break;
-    }
-
-}
-}log1;
-
 class stu
 {
     uint32_t rollno;
@@ -327,8 +251,14 @@ int data_search()
     return 0;
 }
 int main()
-{
-    //  log1.mainmenu();  coz errors
+{   loginpanel:
+    //  signup();
+    if(!login())
+    {
+        system("pause");
+        goto loginpanel;
+    }
+    system("pause");
     menu:
     system("cls");
 
