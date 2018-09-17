@@ -43,6 +43,15 @@ int login()
         cout << "Wrong Credentials";
     return i;
 }
+void signup()
+{   cout << "\t\t\t Signup Panel" << endl;
+    cout << "Enter username: ";
+    cin.getline(log1.username,10);
+    cout << "Enter password: ";
+    cin.getline(log1.password,10);
+    ofstream fout ("db", ios::binary | ios::app);
+    fout.write((char*)&log1 , sizeof(Login));
+    fout.close();
 class stu
 {
     uint32_t rollno;
