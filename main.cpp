@@ -284,27 +284,30 @@ int main()
     system("cls");
 
     cout << "\t\t\t Enter the number to proceed to corresponding operation" << endl;
-    cout << "1. Append Data" << endl
-         << "2. Delete Data" << endl
-         << "3. Modify Data" << endl
-         << "4. Search Record" << endl
-         << "5. Exit" << endl;
+    cout << "1. Create Class" << endl
+         << "2. Append Data" << endl
+         << "3. Delete Data" << endl
+         << "4. Modify Data" << endl
+         << "5. Search Record" << endl
+         << "6. Exit" << endl;
     int *op = new int;
     cin >> *op;
     switch (*op)
     {
-        case 1 : *op=data_append();
+        case 1 : *op=data_new();
                     break;
-        case 2 : *op=data_delete();
+        case 2 : *op=data_append();
                     break;
-        case 3 : *op=data_modify();
+        case 3 : *op=data_delete();
                     break;
-        case 4 : *op=data_search();
+        case 4 : *op=data_modify();
                     break;
-        case 5 : exit(0);
+        case 5 : *op=data_search();
+                    break;
+        case 6 : exit(0);
 
         default : cout << "Wrong input!";
-
+        getchar();
     }
     system("pause");
     goto menu;
