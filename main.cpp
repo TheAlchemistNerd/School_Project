@@ -52,6 +52,7 @@ void signup()
     ofstream fout ("db", ios::binary | ios::app);
     fout.write((char*)&log1 , sizeof(Login));
     fout.close();
+}
 class stu
 {
     uint32_t rollno;
