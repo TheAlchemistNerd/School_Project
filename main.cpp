@@ -250,6 +250,27 @@ int data_search()
         cout << " Record not found ;__; \n";
     return 0;
 }
+int data_new()
+{   char Class[10];
+    cout << "Enter new class name :";
+    getchar();
+    cin.getline(Class,10);
+    cout << "\nCreating Class files.." << endl;
+    ifstream tmp1 (Class,ios::in);
+    getchar();
+    if (tmp1)
+    {
+        cout << "Class already exists!!!" << endl;
+        tmp1.close();
+        return -1;
+
+    }
+    ofstream newclass (Class,ios::out);
+    newclass.close();
+    cout << "Class creation successful" << endl;
+    system("pause");
+    return 0;
+}
 int main()
 {   loginpanel:
     //  signup();
