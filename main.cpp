@@ -308,6 +308,7 @@ int main()
 
         default : cout << "Wrong input!";
         getchar();
+        delete op;
     }
     system("pause");
     goto menu;
