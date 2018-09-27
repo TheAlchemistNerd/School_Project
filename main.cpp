@@ -317,22 +317,27 @@ int main()
     switch (*op)
     {
         case 1 : *op=data_new();
+                    delete op;
                     break;
         case 2 : *op=data_append();
+                    delete op;
                     break;
         case 3 : *op=data_delete();
+                    delete op;
                     break;
         case 4 : *op=data_modify();
+                    delete op;
                     break;
         case 5 : *op=data_search();
+                    delete op;
                     break;
-        case 6 : goto loginpanel;
+        case 6 : delete op;
+                    goto loginpanel;
                     break;
         case 7 : exit(0);
 
         default : cout << "Wrong input!";
         getchar();
-        delete op;
     }
     system("pause");
     goto menu;
