@@ -30,7 +30,7 @@ int login()
     while(!fin.eof())
     {
         fin.read((char*)&log2 , sizeof(Login));
-        if (strcmp(log1.username,log2.username) && strcmp(log1.password,log2.password))
+        if (strcmp(log1.username,log2.username)==0 && strcmp(log1.password,log2.password)==0)
         {
             cout << "Logged in" << endl;
             i=1;
@@ -49,6 +49,22 @@ void signup()
     cin.getline(log1.username,10);
     cout << "Enter password: ";
     cin.getline(log1.password,10);
+    ifstream fin ("db", ios::binary | ios::in);
+    while(!fin.eof())
+    {
+        fin.read((char*)&log2 , sizeof(Login));
+        if (!fin)
+            break;
+        if (strcmp(log1.username,log2.username)==0 )
+        {
+            cout << "User already exists!" << endl;
+            system("PAUSE");
+            system("CLS");
+            signup();
+        }
+
+    }
+    fin.close();
     ofstream fout ("db", ios::binary | ios::app);
     fout.write((char*)&log1 , sizeof(Login));
     fout.close();
@@ -277,12 +293,12 @@ int data_new()
     return 0;
 }
 int main()
-{   loginpanel:
-    //  signup();
+{  loginpanel:
+    getchar();
     if(!login())
     {
         system("pause");
-        goto loginpanel;
+        signup();
     }
     system("pause");
     menu:
@@ -294,7 +310,8 @@ int main()
          << "3. Delete Data" << endl
          << "4. Modify Data" << endl
          << "5. Search Record" << endl
-         << "6. Exit" << endl;
+         << "6. Logout" << endl
+         << "7. Exit" << endl;
     int *op = new int;
     cin >> *op;
     switch (*op)
@@ -309,7 +326,9 @@ int main()
                     break;
         case 5 : *op=data_search();
                     break;
-        case 6 : exit(0);
+        case 6 : goto loginpanel;
+                    break;
+        case 7 : exit(0);
 
         default : cout << "Wrong input!";
         getchar();
