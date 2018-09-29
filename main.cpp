@@ -333,7 +333,8 @@ int main()
          << "4. Modify Data" << endl
          << "5. Search Record" << endl
          << "6. Logout" << endl
-         << "7. Exit" << endl;
+         << "7. Delete Class" << endl
+         << "8. Exit" << endl;
     int *op = new int;
     cin >> *op;
     switch (*op)
@@ -356,7 +357,10 @@ int main()
         case 6 : delete op;
                     goto loginpanel;
                     break;
-        case 7 : exit(0);
+        case 7 : *op=data_remove();
+                    delete op;
+                    break;
+        case 8 : exit(0);
 
         default : cout << "Wrong input!";
         getchar();
