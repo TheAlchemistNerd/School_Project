@@ -298,6 +298,23 @@ int data_new()
     system("pause");
     return 0;
 }
+int data_remove()
+{
+    char ClassDel[10];
+    cout << "Enter class name to be deleted:";
+    getchar();
+    cin.getline(ClassDel,10);
+    cout << "\nDeleting Class files.." << endl;
+    ifstream tmp1 (ClassDel,ios::in);
+    if ( !tmp1 )
+    {
+        cout << "No such class as '" << ClassDel << "'" << endl;
+        return -1;
+    }
+    tmp1.close();
+    remove(ClassDel);
+    return 0;
+}
 int main()
 {  loginpanel:
     if(!login())
