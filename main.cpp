@@ -16,6 +16,7 @@ class Login
 
 int login()
 {   cout << "\t\t\t Login Panel" << endl;
+    getchar();
     cout << "Enter username: ";
     cin.getline(log1.username,10);
     cout << "Enter password: ";
@@ -49,6 +50,11 @@ void signup()
     cin.getline(log1.username,10);
     cout << "Enter password: ";
     cin.getline(log1.password,10);
+    if( !strlen(log1.username) || !strlen(log1.password) )
+    {
+        cout << "Error, unsupported characters" << endl;
+        signup();
+    }
     ifstream fin ("db", ios::binary | ios::in);
     while(!fin.eof())
     {
@@ -294,7 +300,6 @@ int data_new()
 }
 int main()
 {  loginpanel:
-    getchar();
     if(!login())
     {
         system("pause");
