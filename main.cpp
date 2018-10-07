@@ -15,7 +15,8 @@ class Login
 }log1,log2;
 
 int login()
-{   cout << "\t\t\t Login Panel" << endl;
+{
+    cout << "\t\t\t Login Panel" << endl;
     getchar();
     cout << "Enter username: ";
     cin.getline(log1.username,10);
@@ -45,7 +46,8 @@ int login()
     return i;
 }
 void signup()
-{   cout << "\t\t\t Signup Panel" << endl;
+{
+    cout << "\t\t\t Signup Panel" << endl;
     cout << "Enter username: ";
     cin.getline(log1.username,10);
     cout << "Enter password: ";
@@ -109,20 +111,12 @@ class stu
     int getrno() {  return rollno;    }
 } s1, stud ;
 
-int data_append()
+int data_append(char* neim)
 {
-    system("cls");
-    cout << "Enter class (use numerals only)";      //implemented for school project
-    getchar();
-    char neim[8];
-    cin.getline(neim,8);
     ifstream fi (neim, ios::in | ios::binary);
     if (!fi)
     {
-        cout << "No such file in database" << endl;
-        system("PAUSE");
         return -1;
-
     }
     ofstream fo ("temp.dat", ios::out | ios::binary);
     char last ='y';
@@ -153,24 +147,11 @@ int data_append()
     fi.close(); fo.close();
     remove(neim);
     rename("temp.dat",neim);
-    fi.open(neim, ios::in);
-    cout << "File now contains : \n";
-    while (!fi.eof())
-    {
-        fi.read((char*)&stud, sizeof(stu));
-        if (fi.eof()) break;
-        stud.putdata();
-    }
-    fi.close();
     return 0;
 }
 
-int data_delete()
+int data_delete(char* neim)
 {
-    cout << "Enter class (use numerals only)";      //implemented for school project
-    getchar();
-    char neim[8];
-    cin.getline(neim,8);
     ifstream fi (neim, ios::in | ios::binary);
     if (!fi)
     {
@@ -201,22 +182,13 @@ int data_delete()
     if ( found == 'f' )
         cout << " Record not found ;__; \n";
     fi.close();    file.close();
-    remove("stu.dat");  rename("temp.dat","stu.dat");
-    fi.open("stu.dat", ios::in);
-    cout << "File now contains : \n";
-    while (!fi.eof())
-    {
-        fi.read((char*)&stud, sizeof(stu));
-        if (fi.eof()) break;
-        stud.putdata();
-    }
-    fi.close();
+    remove(neim);  rename("temp.dat",neim);
     return 0;
 }
 
-int data_modify()
+int data_modify(char* neim)
 {
-    fstream fio("stu.dat",ios::in|ios::out|ios::binary);
+    fstream fio(neim,ios::in|ios::out|ios::binary);
     int rno ;   long pos ;  char found = 'f';
     cout << " Enter rollno of student whose record is to be modified \n";
     getchar();
@@ -234,7 +206,7 @@ int data_modify()
         }
     }
         if ( found == 'f')
-            cout << "Record not found ;__; \n";
+            return -1;
         fio.seekg(0);
         cout << "Now the file contains \n";
         while(!fio.eof())
@@ -246,17 +218,12 @@ int data_modify()
         return 0;
 }
 
-int data_search()
+int data_search(char* neim)
 {
-    cout << "Enter class (use numerals only)";      //implemented for school project
-    getchar();
-    char neim[8];
-    cin.getline(neim,8);
+
     ifstream fi (neim, ios::in | ios::binary);
     if (!fi)
     {
-        cout << "No such file in database" << endl;
-        system("PAUSE");
         return -1;
 
     }
@@ -274,49 +241,34 @@ int data_search()
         }
     }
     if ( found == 'f' )
-        cout << " Record not found ;__; \n";
+        return -2;
     return 0;
 }
-int data_new()
-{   char Class[10];
-    cout << "Enter new class name :";
-    getchar();
-    cin.getline(Class,10);
-    cout << "\nCreating Class files.." << endl;
+int data_new(char* Class)
+{
     ifstream tmp1 (Class,ios::in);
-    getchar();
     if (tmp1)
     {
         cout << "Class already exists!!!" << endl;
         tmp1.close();
         return -1;
-
     }
     ofstream newclass (Class,ios::out);
     newclass.close();
-    cout << "Class creation successful" << endl;
-    system("pause");
     return 0;
 }
-int data_remove()
+int data_remove(char* ClassDel)
 {
-    char ClassDel[10];
-    cout << "Enter class name to be deleted:";
-    getchar();
-    cin.getline(ClassDel,10);
-    cout << "\nDeleting Class files.." << endl;
     ifstream tmp1 (ClassDel,ios::in);
     if ( !tmp1 )
-    {
-        cout << "No such class as '" << ClassDel << "'" << endl;
         return -1;
-    }
     tmp1.close();
     remove(ClassDel);
     return 0;
 }
 int main()
-{  loginpanel:
+{
+  loginpanel:
     if(!login())
     {
         system("pause");
@@ -325,45 +277,135 @@ int main()
     system("pause");
     menu:
     system("cls");
-
     cout << "\t\t\t Enter the number to proceed to corresponding operation" << endl;
     cout << "1. Create Class" << endl
          << "2. Append Data" << endl
          << "3. Delete Data" << endl
          << "4. Modify Data" << endl
          << "5. Search Record" << endl
-         << "6. Logout" << endl
-         << "7. Delete Class" << endl
+         << "6. Delete Class" << endl
+         << "7. Logout" << endl
          << "8. Exit" << endl;
     int *op = new int;
     cin >> *op;
     switch (*op)
     {
-        case 1 : *op=data_new();
+        case 1 : {  char Class[10];
+                    cout << "Enter new class name :";
+                    getchar();
+                    cin.getline(Class,10);
+                    cout << "\nCreating Class files.." << endl;
+                    *op=data_new(Class);
+                    if (*op==(-1))
+                    {
+                        cout << "Class already exists!!!" << endl;
+                        break;
+                    }
+                    cout << "Class creation successful" << endl;
+                    system("pause");
                     delete op;
                     break;
-        case 2 : *op=data_append();
+                 }
+        case 2 : {
+                 system("cls");
+                 char neim[8];
+                 cout << "Enter class (use numerals only)";      //implemented for school project
+                 getchar();
+                 cin.getline(neim,8);
+                 *op=data_append(neim);
+                 if (*op==(-1))
+                 {
+                    cout << "No such file in database" << endl;
+                    break;
+                 }
+                 ifstream fi(neim, ios::in);
+                 cout << "File now contains : \n";
+                 while (!fi.eof())
+                {
+                    fi.read((char*)&stud, sizeof(stu));
+                    if (fi.eof()) break;
+                    stud.putdata();
+                }
+                fi.close();
+                delete op;
+                break;
+                }
+        case 3 : {
+                  cout << "Enter class";      //implemented for school project
+                  getchar();
+                  char neim1[8];
+                  cin.getline(neim1,8);
+                  *op=data_delete(neim1);
+                  if (*op==(-1))
+                  {
+                        cout << "No such file in database" << endl;
+                        system("PAUSE");
+                  }
+                  ifstream fi;
+                  fi.open(neim1, ios::in);
+                  cout << "File now contains : \n";
+                  while (!fi.eof())
+                  {
+                        fi.read((char*)&stud, sizeof(stu));
+                        if (fi.eof()) break;
+                        stud.putdata();
+                  }
+                  fi.close();
                     delete op;
                     break;
-        case 3 : *op=data_delete();
+                 }
+        case 4 : {
+                    cout << "Enter class (use numerals only)";      //implemented for school project
+                    char neim[8];
+                    cin.getline(neim,8);
+                    *op=data_modify(neim);
+                    if ( *op==(-1))
+                    {
+                        cout << "Record not found ;__; \n";
+                    }
                     delete op;
                     break;
-        case 4 : *op=data_modify();
+                 }
+        case 5 : {
+                    cout << "Enter class (use numerals only)";      //implemented for school project
+                    char neim[8];
+                    cin.getline(neim,8);
+                    *op=data_search(neim);
+                    if(*op==(-1))
+                    {
+                        cout << "No such file in database" << endl;
+                        system("PAUSE");
+                    }
+                    else if(*op==(-2))
+                    {
+                        cout << "Record not found" << endl;
+                        system("PAUSE");
+                    }
                     delete op;
                     break;
-        case 5 : *op=data_search();
+                 }
+        case 6 : {
+                    char ClassDel[10];
+                    cout << "Enter class name to be deleted:" << endl;
+                    cin.getline(ClassDel,10);
+                    cout << "Deleting Class files.." << endl;
+                    *op=data_remove(ClassDel);
+                    if(*op==(-1))
+                    {
+                     cout << "No such class as '" << ClassDel << "'" << endl;
+                    }
                     delete op;
                     break;
-        case 6 : delete op;
+                 }
+        case 7 : {
+                    delete op;
                     goto loginpanel;
-                    break;
-        case 7 : *op=data_remove();
+                 }
+        case 8 : {
                     delete op;
-                    break;
-        case 8 : exit(0);
-
+                    exit(0);
+                 }
         default : cout << "Wrong input!";
-        getchar();
     }
     system("pause");
     goto menu;
