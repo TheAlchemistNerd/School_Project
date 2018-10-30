@@ -5,7 +5,6 @@
 #include <process.h>
 #include <string.h>
 
-using namespace std;
 
 class Login
 {
@@ -16,16 +15,16 @@ class Login
 
 int login()
 {
-    cout << "\t\t\t Login Panel" << endl;
+    std::cout << "\t\t\t Login Panel" << std::endl;
     getchar();
-    cout << "Enter username: ";
-    cin.getline(log1.username,10);
-    cout << "Enter password: ";
-    cin.getline(log1.password,10);
-    ifstream fin ("db", ios::binary | ios::in);
+    std::cout << "Enter username: ";
+    std::cin.getline(log1.username,10);
+    std::cout << "Enter password: ";
+    std::cin.getline(log1.password,10);
+    std::ifstream fin ("db", std::ios::binary | std::ios::in);
     if (!fin)
     {
-        cout<< "Database cannot be accessed" << endl;
+        std::cout<< "Database cannot be accessed" << std::endl;
         return 0;
     }
     int i=0;
@@ -34,7 +33,7 @@ int login()
         fin.read((char*)&log2 , sizeof(Login));
         if (strcmp(log1.username,log2.username)==0 && strcmp(log1.password,log2.password)==0)
         {
-            cout << "Logged in" << endl;
+            std::cout << "Logged in" << std::endl;
             i=1;
             break;
         }
@@ -42,22 +41,22 @@ int login()
     }
     fin.close();
     if(!i)
-        cout << "Wrong Credentials";
+        std::cout << "Wrong Credentials";
     return i;
 }
 void signup()
 {
-    cout << "\t\t\t Signup Panel" << endl;
-    cout << "Enter username: ";
-    cin.getline(log1.username,10);
-    cout << "Enter password: ";
-    cin.getline(log1.password,10);
+    std::cout << "\t\t\t Signup Panel" << std::endl;
+    std::cout << "Enter username: ";
+    std::cin.getline(log1.username,10);
+    std::cout << "Enter password: ";
+    std::cin.getline(log1.password,10);
     if( !strlen(log1.username) || !strlen(log1.password) )
     {
-        cout << "Error, unsupported characters" << endl;
+        std::cout << "Error, unsupported characters" << std::endl;
         signup();
     }
-    ifstream fin ("db", ios::binary | ios::in);
+    std::ifstream fin ("db", std::ios::binary | std::ios::in);
     while(!fin.eof())
     {
         fin.read((char*)&log2 , sizeof(Login));
@@ -65,7 +64,7 @@ void signup()
             break;
         if (strcmp(log1.username,log2.username)==0 )
         {
-            cout << "User already exists!" << endl;
+            std::cout << "User already exists!" << std::endl;
             system("PAUSE");
             system("CLS");
             signup();
@@ -73,7 +72,7 @@ void signup()
 
     }
     fin.close();
-    ofstream fout ("db", ios::binary | ios::app);
+    std::ofstream fout ("db", std::ios::binary | std::ios::app);
     fout.write((char*)&log1 , sizeof(Login));
     fout.close();
 }
@@ -97,28 +96,28 @@ class stu
   public:
     void getdata()
     {
-        cout<<"Rollno :";   cin>>rollno;
-        cout<<"Class :";    cin>>Class;
-        cout<<"Name :";     getchar();  cin.getline(Name, 20);
-        cout<<"Marks :";    cin>>marks;
+        std::cout<<"Rollno :";   std::cin>>rollno;
+        std::cout<<"Class :";    std::cin>>Class;
+        std::cout<<"Name :";     getchar();  std::cin.getline(Name, 20);
+        std::cout<<"Marks :";    std::cin>>marks;
         grade=calcgrade(marks,grade);
     }
     void putdata()
     {
-        cout<< "Rollno : " << rollno << "\t Name : " << Name
-            << "\n Marks : " << marks << "\t Grade : " << grade << endl;
+        std::cout<< "Rollno : " << rollno << "\t Name : " << Name
+            << "\n Marks : " << marks << "\t Grade : " << grade << std::endl;
     }
     int getrno() {  return rollno;    }
 } s1, stud ;
 
 int data_append(char* neim)
 {
-    ifstream fi (neim, ios::in | ios::binary);
+    std::ifstream fi (neim, std::ios::in | std::ios::binary);
     if (!fi)
     {
         return -1;
     }
-    ofstream fo ("temp.dat", ios::out | ios::binary);
+    std::ofstream fo ("temp.dat", std::ios::out | std::ios::binary);
     char last ='y';
     std::cout << " Enter details of student whose record is to be inserted \n ";
     s1.getdata();
@@ -152,18 +151,18 @@ int data_append(char* neim)
 
 int data_delete(char* neim)
 {
-    ifstream fi (neim, ios::in | ios::binary);
+    std::ifstream fi (neim, std::ios::in | std::ios::binary);
     if (!fi)
     {
-        cout << "No such file in database" << endl;
+        std::cout << "No such file in database" << std::endl;
         system("PAUSE");
         return -1;
 
     }
-    ofstream file ("temp.dat", ios::out | ios::binary);
+    std::ofstream file ("temp.dat", std::ios::out | std::ios::binary);
     int rno;    char found = 'f' , confirm = 'n' ;
-    cout << " Enter rollno of student whose record is to be deleted \n";
-    cin >> rno;
+    std::cout << " Enter rollno of student whose record is to be deleted \n";
+    std::cin >> rno;
     while (!fi.eof())
     {
         fi.read((char*)&s1,sizeof(stu));
@@ -171,8 +170,8 @@ int data_delete(char* neim)
         {
             s1.putdata();
             found = 't';
-            cout << " Are you sure, you want to delete this record? (y/n).. ";
-            cin>> confirm ;
+            std::cout << " Are you sure, you want to delete this record? (y/n).. ";
+            std::cin>> confirm ;
             if (confirm == 'n')
                 file.write((char*)&s1,sizeof(stu));
         }
@@ -180,7 +179,7 @@ int data_delete(char* neim)
             file.write((char*)&s1,sizeof(stu));
     }
     if ( found == 'f' )
-        cout << " Record not found ;__; \n";
+        std::cout << " Record not found ;__; \n";
     fi.close();    file.close();
     remove(neim);  rename("temp.dat",neim);
     return 0;
@@ -188,11 +187,11 @@ int data_delete(char* neim)
 
 int data_modify(char* neim)
 {
-    fstream fio(neim,ios::in|ios::out|ios::binary);
+    std::fstream fio(neim, std::ios::in | std::ios::out | std::ios::binary);
     int rno ;   long pos ;  char found = 'f';
-    cout << " Enter rollno of student whose record is to be modified \n";
+    std::cout << " Enter rollno of student whose record is to be modified \n";
     getchar();
-    cin >> rno;
+    std::cin >> rno;
     while ( !fio.eof())
     {
         pos = fio.tellg();
@@ -208,7 +207,7 @@ int data_modify(char* neim)
         if ( found == 'f')
             return -1;
         fio.seekg(0);
-        cout << "Now the file contains \n";
+        std::cout << "Now the file contains \n";
         while(!fio.eof())
         {
             fio.read((char*)&stud, sizeof(stu));
@@ -221,15 +220,15 @@ int data_modify(char* neim)
 int data_search(char* neim)
 {
 
-    ifstream fi (neim, ios::in | ios::binary);
+    std::ifstream fi (neim, std::ios::in | std::ios::binary);
     if (!fi)
     {
         return -1;
 
     }
     int rno;    char found = 'f' ;
-    cout << " Enter rollno of student whose record is to be searched \n";
-    cin >> rno;
+    std::cout << " Enter rollno of student whose record is to be searched \n";
+    std::cin >> rno;
     while (!fi.eof())
     {
         fi.read((char*)&s1,sizeof(stu));
@@ -246,20 +245,20 @@ int data_search(char* neim)
 }
 int data_new(char* Class)
 {
-    ifstream tmp1 (Class,ios::in);
+    std::ifstream tmp1 (Class,std::ios::in);
     if (tmp1)
     {
-        cout << "Class already exists!!!" << endl;
+        std::cout << "Class already exists!!!" << std::endl;
         tmp1.close();
         return -1;
     }
-    ofstream newclass (Class,ios::out);
+    std::ofstream newclass (Class,std::ios::out);
     newclass.close();
     return 0;
 }
 int data_remove(char* ClassDel)
 {
-    ifstream tmp1 (ClassDel,ios::in);
+    std::ifstream tmp1 (ClassDel,std::ios::in);
     if ( !tmp1 )
         return -1;
     tmp1.close();
@@ -277,31 +276,32 @@ int main()
     system("pause");
     menu:
     system("cls");
-    cout << "\t\t\t Enter the number to proceed to corresponding operation" << endl;
-    cout << "1. Create Class" << endl
-         << "2. Append Data" << endl
-         << "3. Delete Data" << endl
-         << "4. Modify Data" << endl
-         << "5. Search Record" << endl
-         << "6. Delete Class" << endl
-         << "7. Logout" << endl
-         << "8. Exit" << endl;
+    std::cout << "\t\t\t Enter the number to proceed to corresponding operation" << std::endl;
+    std::cout
+         << "1. Create Class"   << std::endl
+         << "2. Append Data"    << std::endl
+         << "3. Delete Data"    << std::endl
+         << "4. Modify Data"    << std::endl
+         << "5. Search Record"  << std::endl
+         << "6. Delete Class"   << std::endl
+         << "7. Logout"         << std::endl
+         << "8. Exit"           << std::endl;
     int *op = new int;
-    cin >> *op;
+    std::cin >> *op;
     switch (*op)
     {
         case 1 : {  char Class[10];
-                    cout << "Enter new class name :";
+                    std::cout << "Enter new class name :";
                     getchar();
-                    cin.getline(Class,10);
-                    cout << "\nCreating Class files.." << endl;
+                    std::cin.getline(Class,10);
+                    std::cout << "\nCreating Class files.." << std::endl;
                     *op=data_new(Class);
                     if (*op==(-1))
                     {
-                        cout << "Class already exists!!!" << endl;
+                        std::cout << "Class already exists!!!" << std::endl;
                         break;
                     }
-                    cout << "Class creation successful" << endl;
+                    std::cout << "Class creation successful" << std::endl;
                     system("pause");
                     delete op;
                     break;
@@ -309,17 +309,17 @@ int main()
         case 2 : {
                  system("cls");
                  char neim[8];
-                 cout << "Enter class (use numerals only)";      //implemented for school project
+                 std::cout << "Enter class (use numerals only)";      //implemented for school project
                  getchar();
-                 cin.getline(neim,8);
+                 std::cin.getline(neim,8);
                  *op=data_append(neim);
                  if (*op==(-1))
                  {
-                    cout << "No such file in database" << endl;
+                    std::cout << "No such file in database" << std::endl;
                     break;
                  }
-                 ifstream fi(neim, ios::in);
-                 cout << "File now contains : \n";
+                 std::ifstream fi(neim, std::ios::in);
+                 std::cout << "File now contains : \n";
                  while (!fi.eof())
                 {
                     fi.read((char*)&stud, sizeof(stu));
@@ -331,19 +331,19 @@ int main()
                 break;
                 }
         case 3 : {
-                  cout << "Enter class";      //implemented for school project
+                  std::cout << "Enter class";      //implemented for school project
                   getchar();
                   char neim1[8];
-                  cin.getline(neim1,8);
+                  std::cin.getline(neim1,8);
                   *op=data_delete(neim1);
                   if (*op==(-1))
                   {
-                        cout << "No such file in database" << endl;
+                        std::cout << "No such file in database" << std::endl;
                         system("PAUSE");
                   }
-                  ifstream fi;
-                  fi.open(neim1, ios::in);
-                  cout << "File now contains : \n";
+                  std::ifstream fi;
+                  fi.open(neim1, std::ios::in);
+                  std::cout << "File now contains : \n";
                   while (!fi.eof())
                   {
                         fi.read((char*)&stud, sizeof(stu));
@@ -355,30 +355,30 @@ int main()
                     break;
                  }
         case 4 : {
-                    cout << "Enter class (use numerals only)";      //implemented for school project
+                    std::cout << "Enter class (use numerals only)";      //implemented for school project
                     char neim[8];
-                    cin.getline(neim,8);
+                    std::cin.getline(neim,8);
                     *op=data_modify(neim);
                     if ( *op==(-1))
                     {
-                        cout << "Record not found ;__; \n";
+                        std::cout << "Record not found ;__; \n";
                     }
                     delete op;
                     break;
                  }
         case 5 : {
-                    cout << "Enter class (use numerals only)";      //implemented for school project
+                    std::cout << "Enter class (use numerals only)";      //implemented for school project
                     char neim[8];
-                    cin.getline(neim,8);
+                    std::cin.getline(neim,8);
                     *op=data_search(neim);
                     if(*op==(-1))
                     {
-                        cout << "No such file in database" << endl;
+                       std::cout << "No such file in database" << std::endl;
                         system("PAUSE");
                     }
                     else if(*op==(-2))
                     {
-                        cout << "Record not found" << endl;
+                        std::cout << "Record not found" << std::endl;
                         system("PAUSE");
                     }
                     delete op;
@@ -386,13 +386,13 @@ int main()
                  }
         case 6 : {
                     char ClassDel[10];
-                    cout << "Enter class name to be deleted:" << endl;
-                    cin.getline(ClassDel,10);
-                    cout << "Deleting Class files.." << endl;
+                    std::cout << "Enter class name to be deleted:" << std::endl;
+                    std::cin.getline(ClassDel,10);
+                    std::cout << "Deleting Class files.." << std::endl;
                     *op=data_remove(ClassDel);
                     if(*op==(-1))
                     {
-                     cout << "No such class as '" << ClassDel << "'" << endl;
+                     std::cout << "No such class as '" << ClassDel << "'" << std::endl;
                     }
                     delete op;
                     break;
@@ -405,7 +405,7 @@ int main()
                     delete op;
                     exit(0);
                  }
-        default : cout << "Wrong input!";
+        default : std::cout << "Wrong input!";
     }
     system("pause");
     goto menu;
