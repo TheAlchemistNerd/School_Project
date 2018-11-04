@@ -41,40 +41,45 @@ int login()
     }
     fin.close();
     if(!i)
+
         std::cout << "Wrong Credentials";
+
     return i;
 }
-void signup()
+int signup()
 {
-    std::cout << "\t\t\t Signup Panel" << std::endl;
-    std::cout << "Enter username: ";
-    std::cin.getline(log1.username,10);
-    std::cout << "Enter password: ";
-    std::cin.getline(log1.password,10);
-    if( !strlen(log1.username) || !strlen(log1.password) )
-    {
-        std::cout << "Error, unsupported characters" << std::endl;
-        signup();
-    }
-    std::ifstream fin ("db", std::ios::binary | std::ios::in);
-    while(!fin.eof())
-    {
-        fin.read((char*)&log2 , sizeof(Login));
-        if (!fin)
-            break;
-        if (strcmp(log1.username,log2.username)==0 )
+        std::cout << "\t\t\t Signup Panel" << std::endl;
+        std::cout << "Enter username: ";
+        getchar();
+        std::cin.getline(log1.username,10);
+        std::cout << "Enter password: ";
+        getchar();
+        std::cin.getline(log1.password,10);
+        if( !strlen(log1.username) || !strlen(log1.password) )
         {
-            std::cout << "User already exists!" << std::endl;
+            std::cout << "Error, unsupported characters" << std::endl;
             system("PAUSE");
             system("CLS");
-            signup();
+            return 0;
         }
-
-    }
-    fin.close();
-    std::ofstream fout ("db", std::ios::binary | std::ios::app);
-    fout.write((char*)&log1 , sizeof(Login));
-    fout.close();
+        std::ifstream fin ("db", std::ios::binary | std::ios::in);
+        while(!fin.eof())
+        {
+            fin.read((char*)&log2 , sizeof(Login));
+            if ( strcmp(log1.username,log2.username)==0 )
+            {
+                std::cout << "User already exists!" << std::endl;
+                system("PAUSE");
+                system("CLS");
+                return 0;
+            }
+        }
+        fin.close();
+        std::ofstream fout ("db", std::ios::binary | std::ios::app);
+        fout.write((char*)&log1 , sizeof(Login));
+        std::cout << "\nSignup sucess" << std::endl;
+        fout.close();
+        return 1;
 }
 class stu
 {
@@ -267,12 +272,27 @@ int data_remove(char* ClassDel)
 }
 int main()
 {
-  loginpanel:
-    if(!login())
-    {
-        system("pause");
-        signup();
-    }
+    int log;
+    while (1)
+{
+    while(1)
+     {  system("cls");
+        std::cout << "Login Panel" << std::endl
+                        << "1. Login" << std::endl
+                        << "2. Sign up" << std::endl;
+        std::cin >> log;
+        switch(log)
+        {
+            case 1 :   { log=login();
+                        break; }
+            case 2 :    { log=signup();
+                        break; }
+            default : std::cout << "Wrong input" << std::endl;
+        }
+        if(log==1)
+            break;
+     }
+
     system("pause");
     menu:
     system("cls");
@@ -288,6 +308,7 @@ int main()
          << "8. Exit"           << std::endl;
     int *op = new int;
     std::cin >> *op;
+
     switch (*op)
     {
         case 1 : {  char Class[10];
@@ -399,15 +420,18 @@ int main()
                  }
         case 7 : {
                     delete op;
-                    goto loginpanel;
+                    getchar();
+                    continue;
+
                  }
         case 8 : {
                     delete op;
-                    exit(0);
+                    break;
                  }
         default : std::cout << "Wrong input!";
     }
+}
     system("pause");
-    goto menu;
+
     return 0;
 }
