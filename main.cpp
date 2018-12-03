@@ -81,6 +81,7 @@ int signup()
         fout.close();
         return 1;
 }
+
 class stu
 {
     uint32_t rollno;
@@ -115,45 +116,58 @@ class stu
     int getrno() {  return rollno;    }
 } s1, stud ;
 
+class teacher
+{
+    uint32_t empno;
+    char Name[20];
+    char role[4];
+    float salary;
+    char grade;
+    char calcsal(char* post)
+    {
+        if (strcmpi(post,"PGT")==0)
+            return 'a';
+        if (strcmpi(post,"TGT")==0)
+            return 'b';
+        if (strcmpi(post,"PRT")==0)
+            return 'c';
+        if (strcmpi(post,"UDC")==0)
+            return 'd';
+        if (strcmpi(post,"OT")==0)
+            return 'e';
+        return 'f';
+
+    }
+  public:
+    void getdata()
+    {
+        std::cout<<"Empno :";   std::cin>>empno;
+        std::cout<<"Role :";    std::cin>>role;
+        std::cout<<"Name :";    getchar();  std::cin.getline(Name, 20);
+        std::cout<<"Salary :";  std::cin>>salary;
+        grade=calcsal(role);
+    }
+    void putdata()
+    {
+        std::cout<< "Emp No : " << empno << "\t Name : " << Name
+            << "\n Salary : " << salary << "\t Grade : " << grade << std::endl;
+    }
+    int getrno() {  return empno;    }
+} e1, emp ;
+
 int data_append(char* neim)
 {
-    std::ifstream fi (neim, std::ios::in | std::ios::binary);
+    std::ofstream fi (neim, std::ios::binary | std::ios::app);
     if (!fi)
     {
         return -1;
     }
-    std::ofstream fo ("temp.dat", std::ios::out | std::ios::binary);
-    char last ='y';
-    std::cout << " Enter details of student whose record is to be inserted \n ";
+    std::cout << "Enter details of student whose record is to be inserted" << std::endl;
     s1.getdata();
-    while (!fi.eof())
-    {
-        fi.read((char*)&stud, sizeof(stu));
-        if ( s1.getrno()<= stud.getrno())
-        {
-            fo.write((char*)&s1, sizeof(stu));
-            last = 'n';
-            break;
-        }
-        else
-            fo.write((char*)&stud, sizeof(stu));
-    }
-    if (last == 'y')
-        fo.write((char*)&s1, sizeof(stu));
-    else if (!fi.eof())
-    {
-        while (!fi.eof())
-        {
-        fi.read((char*)&stud, sizeof(stu));
-        fo.write((char*)&stud, sizeof(stu));
-        }
-    }
-    fi.close(); fo.close();
-    remove(neim);
-    rename("temp.dat",neim);
+    fi.write((char*)&s1,sizeof(stu));
+    fi.close();
     return 0;
 }
-
 int data_delete(char* neim)
 {
     std::ifstream fi (neim, std::ios::in | std::ios::binary);
@@ -189,7 +203,6 @@ int data_delete(char* neim)
     remove(neim);  rename("temp.dat",neim);
     return 0;
 }
-
 int data_modify(char* neim)
 {
     std::fstream fio(neim, std::ios::in | std::ios::out | std::ios::binary);
@@ -221,7 +234,6 @@ int data_modify(char* neim)
         fio.close();
         return 0;
 }
-
 int data_search(char* neim)
 {
 
@@ -229,10 +241,9 @@ int data_search(char* neim)
     if (!fi)
     {
         return -1;
-
     }
     int rno;    char found = 'f' ;
-    std::cout << " Enter rollno of student whose record is to be searched \n";
+    std::cout << " Enter roll no of student whose record is to be searched \n";
     std::cin >> rno;
     while (!fi.eof())
     {
@@ -270,31 +281,10 @@ int data_remove(char* ClassDel)
     remove(ClassDel);
     return 0;
 }
+
+
 int main()
 {
-    int log;
-    while (1)
-{
-    while(1)
-     {  system("cls");
-        std::cout << "Login Panel" << std::endl
-                        << "1. Login" << std::endl
-                        << "2. Sign up" << std::endl;
-        std::cin >> log;
-        switch(log)
-        {
-            case 1 :   { log=login();
-                        break; }
-            case 2 :    { log=signup();
-                        break; }
-            default : std::cout << "Wrong input" << std::endl;
-        }
-        if(log==1)
-            break;
-     }
-
-    system("pause");
-    menu:
     system("cls");
     std::cout << "\t\t\t Enter the number to proceed to corresponding operation" << std::endl;
     std::cout
@@ -330,7 +320,7 @@ int main()
         case 2 : {
                  system("cls");
                  char neim[8];
-                 std::cout << "Enter class (use numerals only)";      //implemented for school project
+                 std::cout << "Enter class";
                  getchar();
                  std::cin.getline(neim,8);
                  *op=data_append(neim);
@@ -420,17 +410,16 @@ int main()
                  }
         case 7 : {
                     delete op;
-                    getchar();
-                    continue;
 
                  }
         case 8 : {
                     delete op;
-                    break;
+                    exit(0);
                  }
         default : std::cout << "Wrong input!";
+                  delete op;
     }
-}
+
     system("pause");
 
     return 0;
