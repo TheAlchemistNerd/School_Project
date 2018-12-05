@@ -460,90 +460,98 @@ int main()
         system("cls");
         std::cout << "|                                 Login Menu                                      |" << std::endl;
         std::cout << "Choose your option:" << std::endl
-                    << "\t 1. Login "  << std::endl
-                    << "\t 2. Signup " << std::endl
-                    << "\t 3. Exit "   << std::endl
+                  << "\t 1. Login "  << std::endl
+                  << "\t 2. Signup " << std::endl
+                  << "\t 3. Exit "   << std::endl
                   << "Option: "  << std::endl;
         std::cin >> option;
         switch (option)
         {
-            case 1 :    option=login();
-                        if(option==-1)
-                        {
-                            std::cout<< "Database cannot be accessed!" << std::endl;
-                            system("pause");
-                            system("cls");
-                        }
-                        else if(option==-2)
-                        {
-                            std::cout<< "Wrong credentials!" << std::endl;
-                            system("pause");
-                        }
-                        else if(option==0)
-                        {
-                            std::cout<< "Logged in!" << std::endl;
-                            system("pause");
-                            system("cls");
-                        }
-                        else
-                        {
-                            std::cout<< "Unknown error! Aborting..." << std::endl;      // Just in case something goes wrong :3
-                            exit(-1);
-                        }
-                        break;
-            case 2 :    option=signup();
-                        if(option==-1)
-                        {
-                            std::cout << "Error, unsupported characters" << std::endl;
-                            system("pause");
-                            system("cls");
-                        }
-                        else if(option==-2)
-                        {
-                            std::cout << "User already exists!" << std::endl;
-                            system("pause");
-                            system("cls");
-                        }
-                        else if(option==0)
-                        {
-                            std::cout<< "Signed Up!" << std::endl;
-                            system("pause");
-                            system("cls");
-                            break;
-                        }
-                        else
-                        {
-                            std::cout<< "Unknown error! Aborting..." << std::endl;      // Just in case something goes wrong :3
-                            exit(-1);
-                        }
-                        break;
-            case 3 :    exit(0);
-            default :   std::cout<< "Wrong choice!" << std::endl;
-                        option=1;
-                        break;
+        case 1 :
+            option=login();
+            if(option==-1)
+            {
+                std::cout<< "Database cannot be accessed!" << std::endl;
+                system("pause");
+                system("cls");
+            }
+            else if(option==-2)
+            {
+                std::cout<< "Wrong credentials!" << std::endl;
+                system("pause");
+            }
+            else if(option==0)
+            {
+                std::cout<< "Logged in!" << std::endl;
+                system("pause");
+                system("cls");
+            }
+            else
+            {
+                std::cout<< "Unknown error! Aborting..." << std::endl;      // Just in case something goes wrong :3
+                exit(-1);
+            }
+            break;
+        case 2 :
+            option=signup();
+            if(option==-1)
+            {
+                std::cout << "Error, unsupported characters" << std::endl;
+                system("pause");
+                system("cls");
+            }
+            else if(option==-2)
+            {
+                std::cout << "User already exists!" << std::endl;
+                system("pause");
+                system("cls");
+            }
+            else if(option==0)
+            {
+                std::cout<< "Signed Up!" << std::endl;
+                system("pause");
+                system("cls");
+                break;
+            }
+            else
+            {
+                std::cout<< "Unknown error! Aborting..." << std::endl;      // Just in case something goes wrong :3
+                exit(-1);
+            }
+            break;
+        case 3 :
+            exit(0);
+        default :
+            std::cout<< "Wrong choice!" << std::endl;
+            option=1;
+            break;
         }
 
-    }while (option!=0);
+    }
+    while (option!=0);
     do
     {
         system("cls");
         std::cout << "|                                 Selection Menu                                      |" << std::endl;
         std::cout << "Choose your option:" << std::endl
-                    << "\t 1. Student "  << std::endl
-                    << "\t 2. Staff " << std::endl
-                    << "\t 3. Exit "   << std::endl
+                  << "\t 1. Student "  << std::endl
+                  << "\t 2. Staff " << std::endl
+                  << "\t 3. Exit "   << std::endl
                   << "Option: "  << std::endl;
         std::cin >> option;
         switch (option)
         {
-            case 1 :
-                        break;
-            case 2 :
-                        break;
-            case 3 :    exit(0);
-            default :   std::cout<< "Wrong choice!" << std::endl;
-                        option=1;
-                        break;
+        case 1 :
+            break;
+        case 2 :
+            break;
+        case 3 :
+            exit(0);
+        default :
+            std::cout<< "Wrong choice!" << std::endl;
+            option=1;
+            break;
         }
-    }while (option!=0);
+    }
+    while (option!=0);
 }
