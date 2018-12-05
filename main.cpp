@@ -5,83 +5,67 @@
 #include <process.h>
 #include <string.h>
 
-
 class Login
 {
-    public:
+public:
     char username[10], password[10];
 
-}log1,log2;
+} log1,log2;
 
 int login()
 {
-    std::cout << "\t\t\t Login Panel" << std::endl;
-    getchar();
+    std::cout << "\t\t\t ..::Login Panel::.." << std::endl;
+    std::cin.sync();
     std::cout << "Enter username: ";
     std::cin.getline(log1.username,10);
     std::cout << "Enter password: ";
     std::cin.getline(log1.password,10);
     std::ifstream fin ("db", std::ios::binary | std::ios::in);
     if (!fin)
-    {
-        std::cout<< "Database cannot be accessed" << std::endl;
-        return 0;
-    }
-    int i=0;
+        return -1;
     while(!fin.eof())
     {
-        fin.read((char*)&log2 , sizeof(Login));
+        fin.read((char*)&log2, sizeof(Login));
         if (strcmp(log1.username,log2.username)==0 && strcmp(log1.password,log2.password)==0)
         {
-            std::cout << "Logged in" << std::endl;
-            i=1;
-            break;
+            fin.close();
+            return 0;
         }
 
     }
     fin.close();
-    if(!i)
-
-        std::cout << "Wrong Credentials";
-
-    return i;
+    return -2;      //  Wrong Credentials :(
 }
 int signup()
 {
-        std::cout << "\t\t\t Signup Panel" << std::endl;
-        std::cout << "Enter username: ";
-        getchar();
-        std::cin.getline(log1.username,10);
-        std::cout << "Enter password: ";
-        getchar();
-        std::cin.getline(log1.password,10);
-        if( !strlen(log1.username) || !strlen(log1.password) )
-        {
-            std::cout << "Error, unsupported characters" << std::endl;
-            system("PAUSE");
-            system("CLS");
-            return 0;
-        }
-        std::ifstream fin ("db", std::ios::binary | std::ios::in);
+    std::cout << "\t\t\t Signup Panel" << std::endl;
+    std::cout << "Enter username: ";
+    std::cin.sync();
+    std::cin.getline(log1.username,10);
+    std::cout << "Enter password: ";
+    std::cin.sync();
+    std::cin.getline(log1.password,10);
+    if( !strlen(log1.username) || !strlen(log1.password) )
+        return -1;
+    std::ifstream fin ("db", std::ios::binary | std::ios::in);
+    if (fin)
         while(!fin.eof())
         {
-            fin.read((char*)&log2 , sizeof(Login));
+            fin.read((char*)&log2, sizeof(Login));
             if ( strcmp(log1.username,log2.username)==0 )
-            {
-                std::cout << "User already exists!" << std::endl;
-                system("PAUSE");
-                system("CLS");
-                return 0;
-            }
+                return -2;
         }
-        fin.close();
-        std::ofstream fout ("db", std::ios::binary | std::ios::app);
-        fout.write((char*)&log1 , sizeof(Login));
-        std::cout << "\nSignup sucess" << std::endl;
-        fout.close();
-        return 1;
+    fin.close();
+    std::ofstream fout ("db", std::ios::binary | std::ios::app);
+    fout.write((char*)&log1, sizeof(Login));
+    fout.close();
+    return 0;
 }
 
+/*___________________________________________________________________________________
+                            Student Functions from here
+  ___________________________________________________________________________________
+*/
 class stu
 {
     uint32_t rollno;
@@ -91,69 +75,43 @@ class stu
     char grade;
     char calcgrade(float t1, char t2)
     {
-        if (t1 >= 75) t2='A';
-        else if (t1 >= 60) t2 = 'B';
-        else if (t1 >= 50) t2 = 'C';
-        else if (t1 >= 40) t2 = 'D';
-        else t2 = 'E' ;
+        if (t1 >= 75)
+            t2='A';
+        else if (t1 >= 60)
+            t2 = 'B';
+        else if (t1 >= 50)
+            t2 = 'C';
+        else if (t1 >= 40)
+            t2 = 'D';
+        else
+            t2 = 'E' ;
         return t2;
     }
 
-  public:
+public:
     void getdata()
     {
-        std::cout<<"Rollno :";   std::cin>>rollno;
-        std::cout<<"Class :";    std::cin>>Class;
-        std::cout<<"Name :";     getchar();  std::cin.getline(Name, 20);
-        std::cout<<"Marks :";    std::cin>>marks;
+        std::cout<<"Rollno :";
+        std::cin>>rollno;
+        std::cout<<"Class :";
+        std::cin>>Class;
+        std::cout<<"Name :";
+        std::cin.getline(Name, 20);
+        std::cout<<"Marks :";
+        std::cin>>marks;
         grade=calcgrade(marks,grade);
     }
     void putdata()
     {
-        std::cout<< "Rollno : " << rollno << "\t Name : " << Name
-            << "\n Marks : " << marks << "\t Grade : " << grade << std::endl;
+        std::cout << "Rollno : " << rollno << "\tName : " << Name
+                  << "\nMarks : " << marks << "\tGrade : " << grade
+                  << std::endl;
     }
-    int getrno() {  return rollno;    }
+    int getrno()
+    {
+        return rollno;
+    }
 } s1, stud ;
-
-class teacher
-{
-    uint32_t empno;
-    char Name[20];
-    char role[4];
-    float salary;
-    char grade;
-    char calcsal(char* post)
-    {
-        if (strcmpi(post,"PGT")==0)
-            return 'a';
-        if (strcmpi(post,"TGT")==0)
-            return 'b';
-        if (strcmpi(post,"PRT")==0)
-            return 'c';
-        if (strcmpi(post,"UDC")==0)
-            return 'd';
-        if (strcmpi(post,"OT")==0)
-            return 'e';
-        return 'f';
-
-    }
-  public:
-    void getdata()
-    {
-        std::cout<<"Empno :";   std::cin>>empno;
-        std::cout<<"Role :";    std::cin>>role;
-        std::cout<<"Name :";    getchar();  std::cin.getline(Name, 20);
-        std::cout<<"Salary :";  std::cin>>salary;
-        grade=calcsal(role);
-    }
-    void putdata()
-    {
-        std::cout<< "Emp No : " << empno << "\t Name : " << Name
-            << "\n Salary : " << salary << "\t Grade : " << grade << std::endl;
-    }
-    int getrno() {  return empno;    }
-} e1, emp ;
 
 int data_append(char* neim)
 {
@@ -176,10 +134,10 @@ int data_delete(char* neim)
         std::cout << "No such file in database" << std::endl;
         system("PAUSE");
         return -1;
-
     }
     std::ofstream file ("temp.dat", std::ios::out | std::ios::binary);
-    int rno;    char found = 'f' , confirm = 'n' ;
+    int rno;
+    char found = 'f', confirm = 'n' ;
     std::cout << " Enter rollno of student whose record is to be deleted \n";
     std::cin >> rno;
     while (!fi.eof())
@@ -199,16 +157,20 @@ int data_delete(char* neim)
     }
     if ( found == 'f' )
         std::cout << " Record not found ;__; \n";
-    fi.close();    file.close();
-    remove(neim);  rename("temp.dat",neim);
+    fi.close();
+    file.close();
+    remove(neim);
+    rename("temp.dat",neim);
     return 0;
 }
 int data_modify(char* neim)
 {
     std::fstream fio(neim, std::ios::in | std::ios::out | std::ios::binary);
-    int rno ;   long pos ;  char found = 'f';
+    int rno ;
+    long pos ;
+    char found = 'f', option;
     std::cout << " Enter rollno of student whose record is to be modified \n";
-    getchar();
+    std::cin.sync();
     std::cin >> rno;
     while ( !fio.eof())
     {
@@ -216,23 +178,27 @@ int data_modify(char* neim)
         fio.read((char*)&s1, sizeof(stu));
         if ( s1.getrno() == rno )
         {
+            std::cout << "Modify? (y/n)" << std::endl;
+            s1.putdata();
+            std::cout << "\n:";
+            std::cin >> option;
+            if((option == 'n') || (option == 'N'))
+                break;
+            else
+            {
+                std::cout << "Enter new details :" << std::endl;
+                s1.getdata();
+            }
             fio.seekg(pos);
             fio.write((char*)&s1, sizeof(stu));
             found = 't';
             break;
         }
     }
-        if ( found == 'f')
-            return -1;
-        fio.seekg(0);
-        std::cout << "Now the file contains \n";
-        while(!fio.eof())
-        {
-            fio.read((char*)&stud, sizeof(stu));
-            stud.putdata();
-        }
-        fio.close();
-        return 0;
+    if ( found == 'f')
+        return -1;
+    fio.seekg(0);
+    return 0;
 }
 int data_search(char* neim)
 {
@@ -242,7 +208,8 @@ int data_search(char* neim)
     {
         return -1;
     }
-    int rno;    char found = 'f' ;
+    int rno;
+    char found = 'f' ;
     std::cout << " Enter roll no of student whose record is to be searched \n";
     std::cin >> rno;
     while (!fi.eof())
@@ -281,146 +248,302 @@ int data_remove(char* ClassDel)
     remove(ClassDel);
     return 0;
 }
+void show_students(char* neim)
+{
+    std::ifstream fi;
+    fi.open(neim, std::ios::in);
+    if(!fi)
+    {
+        std::cout << "No database found" << std::endl;
+        return;
+    }
+    std::cout << "File now contains : \n";
+    while (!fi.eof())
+    {
+        fi.read((char*)&s1, sizeof(stu));
+        if (fi.eof())
+            break;
+        s1.putdata();
+    }
+    fi.close();
+    system("pause");
+}
+/*___________________________________________________________________________________
+                            Staff Functions from here
+  ___________________________________________________________________________________
+*/
+class teacher
+{
+    uint32_t empno;
+    char Name[20];
+    char role[4];
+    float salary;
+    float calcsal(char* post)
+    {
+        if (strcmpi(post,"PGT")==0)
+            return 80000;
+        if (strcmpi(post,"TGT")==0)
+            return 60000;
+        if (strcmpi(post,"PRT")==0)
+            return 40000;
+        if (strcmpi(post,"OT")==0)
+            return 20000;
+        return 15000;
+    }
+public:
+    void getstaff()
+    {
+        std::cout<<"Empno. :";
+        std::cin>>empno;
+        std::cout<<"Role :";
+        std::cin>>role;
+        std::cout<<"Name :";
+        std::cin.getline(Name, 20);
+        salary=calcsal(role);
+    }
+    void putstaff()
+    {
+        std::cout << "Empno : " << empno
+                  << "\nName : " << Name << "\tSalary : " << salary
+                  << std::endl;
+    }
+    int getID()
+    {
+        return empno;
+    }
+} e1, emp ;
 
+int staff_append()
+{
+    std::ofstream fi ("staff", std::ios::app | std::ios::binary);
+    if (!fi)
+    {
+        return -1;
+    }
+    std::cout << " Enter details of staff whose record is to be inserted \n ";
+    e1.getstaff();
+    fi.write((char*)&e1, sizeof(teacher));
+    fi.close();
+    return 0;
+}
 
+int staff_delete()
+{
+    std::ifstream fi ("staff", std::ios::in | std::ios::binary);
+    if (!fi)
+    {
+        std::cout << "No such file in staff-base" << std::endl;
+        system("PAUSE");
+        return -1;
+    }
+    std::ofstream file ("temp.dat", std::ios::out | std::ios::binary);
+    int rno;
+    char found = 'f', confirm = 'n' ;
+    std::cout << " Enter Emp No. of staff whose record is to be deleted \n";
+    std::cin >> rno;
+    while (!fi.eof())
+    {
+        fi.read((char*)&e1,sizeof(teacher));
+        if ( e1.getID() == rno )
+        {
+            e1.putstaff();
+            found = 't';
+            std::cout << " Are you sure, you want to delete this record? (y/n).. ";
+            std::cin>> confirm ;
+            if (confirm == 'n')
+                file.write((char*)&e1,sizeof(teacher));
+        }
+        else
+            file.write((char*)&e1,sizeof(teacher));
+    }
+    if ( found == 'f' )
+        std::cout << " Record not found ;__; \n";
+    fi.close();
+    file.close();
+    remove("staff");
+    rename("temp.dat","staff");
+    return 0;
+}
+
+int staff_modify()
+{
+    std::fstream fio("staff", std::ios::in | std::ios::out | std::ios::binary);
+    int rno ;
+    long pos ;
+    char found = 'f', option;
+    std::cout << " Enter empno of staff whose record is to be modified \n";
+    std::cin >> rno;
+    while ( !fio.eof())
+    {
+        pos = fio.tellg();
+        fio.read((char*)&e1, sizeof(teacher));
+        if ( e1.getID() == rno )
+        {
+            std::cout << "Modify? (y/n)" << std::endl;
+            e1.putstaff();
+            std::cout << "\n:";
+            std::cin >> option;
+            if((option == 'n') || (option == 'N'))
+                break;
+            else
+            {
+                std::cout << "Enter new details :" << std::endl;
+                e1.getstaff();
+            }
+            fio.seekg(pos);
+            fio.write((char*)&e1, sizeof(teacher));
+            found = 't';
+            break;
+        }
+    }
+    if ( found == 'f')
+        return -1;
+    return 0;
+}
+
+int staff_search()
+{
+
+    std::ifstream fi ("staff", std::ios::in | std::ios::binary);
+    if (!fi)
+    {
+        return -1;
+    }
+    int rno;
+    char found = 'f' ;
+    std::cout << " Enter empno of staff whose record is to be searched \n";
+    std::cin >> rno;
+    while (!fi.eof())
+    {
+        fi.read((char*)&e1,sizeof(teacher));
+        if ( e1.getID() == rno )
+        {
+            e1.putstaff();
+            found = 't';
+            fi.close();
+        }
+    }
+    if ( found == 'f' )
+        return -2;
+    return 0;
+}
+
+void show_staff()
+{
+    std::ifstream fi;
+    fi.open("staff", std::ios::in);
+    if(!fi)
+    {
+        std::cout << "No staff-base found" << std::endl;
+        return;
+    }
+    std::cout << "File now contains : \n";
+    while (!fi.eof())
+    {
+        fi.read((char*)&emp, sizeof(teacher));
+        if (fi.eof())
+            break;
+        emp.putstaff();
+    }
+    fi.close();
+    system("pause");
+}
 int main()
 {
-    system("cls");
-    std::cout << "\t\t\t Enter the number to proceed to corresponding operation" << std::endl;
-    std::cout
-         << "1. Create Class"   << std::endl
-         << "2. Append Data"    << std::endl
-         << "3. Delete Data"    << std::endl
-         << "4. Modify Data"    << std::endl
-         << "5. Search Record"  << std::endl
-         << "6. Delete Class"   << std::endl
-         << "7. Logout"         << std::endl
-         << "8. Exit"           << std::endl;
-    int *op = new int;
-    std::cin >> *op;
-
-    switch (*op)
-    {
-        case 1 : {  char Class[10];
-                    std::cout << "Enter new class name :";
-                    getchar();
-                    std::cin.getline(Class,10);
-                    std::cout << "\nCreating Class files.." << std::endl;
-                    *op=data_new(Class);
-                    if (*op==(-1))
-                    {
-                        std::cout << "Class already exists!!!" << std::endl;
-                        break;
-                    }
-                    std::cout << "Class creation successful" << std::endl;
-                    system("pause");
-                    delete op;
-                    break;
-                 }
-        case 2 : {
-                 system("cls");
-                 char neim[8];
-                 std::cout << "Enter class";
-                 getchar();
-                 std::cin.getline(neim,8);
-                 *op=data_append(neim);
-                 if (*op==(-1))
-                 {
-                    std::cout << "No such file in database" << std::endl;
-                    break;
-                 }
-                 std::ifstream fi(neim, std::ios::in);
-                 std::cout << "File now contains : \n";
-                 while (!fi.eof())
-                {
-                    fi.read((char*)&stud, sizeof(stu));
-                    if (fi.eof()) break;
-                    stud.putdata();
-                }
-                fi.close();
-                delete op;
-                break;
-                }
-        case 3 : {
-                  std::cout << "Enter class";      //implemented for school project
-                  getchar();
-                  char neim1[8];
-                  std::cin.getline(neim1,8);
-                  *op=data_delete(neim1);
-                  if (*op==(-1))
-                  {
-                        std::cout << "No such file in database" << std::endl;
-                        system("PAUSE");
-                  }
-                  std::ifstream fi;
-                  fi.open(neim1, std::ios::in);
-                  std::cout << "File now contains : \n";
-                  while (!fi.eof())
-                  {
-                        fi.read((char*)&stud, sizeof(stu));
-                        if (fi.eof()) break;
-                        stud.putdata();
-                  }
-                  fi.close();
-                    delete op;
-                    break;
-                 }
-        case 4 : {
-                    std::cout << "Enter class (use numerals only)";      //implemented for school project
-                    char neim[8];
-                    std::cin.getline(neim,8);
-                    *op=data_modify(neim);
-                    if ( *op==(-1))
-                    {
-                        std::cout << "Record not found ;__; \n";
-                    }
-                    delete op;
-                    break;
-                 }
-        case 5 : {
-                    std::cout << "Enter class (use numerals only)";      //implemented for school project
-                    char neim[8];
-                    std::cin.getline(neim,8);
-                    *op=data_search(neim);
-                    if(*op==(-1))
-                    {
-                       std::cout << "No such file in database" << std::endl;
-                        system("PAUSE");
-                    }
-                    else if(*op==(-2))
-                    {
-                        std::cout << "Record not found" << std::endl;
-                        system("PAUSE");
-                    }
-                    delete op;
-                    break;
-                 }
-        case 6 : {
-                    char ClassDel[10];
-                    std::cout << "Enter class name to be deleted:" << std::endl;
-                    std::cin.getline(ClassDel,10);
-                    std::cout << "Deleting Class files.." << std::endl;
-                    *op=data_remove(ClassDel);
-                    if(*op==(-1))
-                    {
-                     std::cout << "No such class as '" << ClassDel << "'" << std::endl;
-                    }
-                    delete op;
-                    break;
-                 }
-        case 7 : {
-                    delete op;
-
-                 }
-        case 8 : {
-                    delete op;
-                    exit(0);
-                 }
-        default : std::cout << "Wrong input!";
-                  delete op;
-    }
-
+    std::cout << " ___________________________________________________________________________________" << std::endl;
+    std::cout << "|_____________________________School Management___________________________________|" << std::endl;
+    std::cout << "|_________________________________________________________________________________|" << std::endl;
     system("pause");
+    int option;
+    do
+    {
+        system("cls");
+        std::cout << "|                                 Login Menu                                      |" << std::endl;
+        std::cout << "Choose your option:" << std::endl
+                    << "\t 1. Login "  << std::endl
+                    << "\t 2. Signup " << std::endl
+                    << "\t 3. Exit "   << std::endl
+                  << "Option: "  << std::endl;
+        std::cin >> option;
+        switch (option)
+        {
+            case 1 :    option=login();
+                        if(option==-1)
+                        {
+                            std::cout<< "Database cannot be accessed!" << std::endl;
+                            system("pause");
+                            system("cls");
+                        }
+                        else if(option==-2)
+                        {
+                            std::cout<< "Wrong credentials!" << std::endl;
+                            system("pause");
+                        }
+                        else if(option==0)
+                        {
+                            std::cout<< "Logged in!" << std::endl;
+                            system("pause");
+                            system("cls");
+                        }
+                        else
+                        {
+                            std::cout<< "Unknown error! Aborting..." << std::endl;      // Just in case something goes wrong :3
+                            exit(-1);
+                        }
+                        break;
+            case 2 :    option=signup();
+                        if(option==-1)
+                        {
+                            std::cout << "Error, unsupported characters" << std::endl;
+                            system("pause");
+                            system("cls");
+                        }
+                        else if(option==-2)
+                        {
+                            std::cout << "User already exists!" << std::endl;
+                            system("pause");
+                            system("cls");
+                        }
+                        else if(option==0)
+                        {
+                            std::cout<< "Signed Up!" << std::endl;
+                            system("pause");
+                            system("cls");
+                            break;
+                        }
+                        else
+                        {
+                            std::cout<< "Unknown error! Aborting..." << std::endl;      // Just in case something goes wrong :3
+                            exit(-1);
+                        }
+                        break;
+            case 3 :    exit(0);
+            default :   std::cout<< "Wrong choice!" << std::endl;
+                        option=1;
+                        break;
+        }
 
-    return 0;
+    }while (option!=0);
+    do
+    {
+        system("cls");
+        std::cout << "|                                 Selection Menu                                      |" << std::endl;
+        std::cout << "Choose your option:" << std::endl
+                    << "\t 1. Student "  << std::endl
+                    << "\t 2. Staff " << std::endl
+                    << "\t 3. Exit "   << std::endl
+                  << "Option: "  << std::endl;
+        std::cin >> option;
+        switch (option)
+        {
+            case 1 :
+                        break;
+            case 2 :
+                        break;
+            case 3 :    exit(0);
+            default :   std::cout<< "Wrong choice!" << std::endl;
+                        option=1;
+                        break;
+        }
+    }while (option!=0);
 }
