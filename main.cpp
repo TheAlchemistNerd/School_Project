@@ -541,12 +541,174 @@ int main()
         std::cin >> option;
         switch (option)
         {
-        case 1 :
+        case 1 :    int op;
+                    char neim[8];
+                    do
+                    {
+                        system("cls");
+                        std::cout << "\t\t\t Enter the number to proceed to corresponding operation" << std::endl;
+                        std::cout
+                                    << "1. Create Class"   << std::endl
+                                    << "2. Append Data"    << std::endl
+                                    << "3. Delete Data"    << std::endl
+                                    << "4. Modify Data"    << std::endl
+                                    << "5. Search Record"  << std::endl
+                                    << "6. Delete Class"   << std::endl
+                                    << "7. Exit"           << std::endl;
+                        std::cin >> op;
+                        switch (op)
+                        {
+                            case 1 :    char Class[10];
+                                        std::cout << "Enter new class name :";
+                                        std::cin.sync();
+                                        std::cin.getline(Class,10);
+                                        std::cout << "\nCreating Class file.." << std::endl;
+                                        op=data_new(Class);
+                                        if (op==(-1))
+                                        {
+                                            std::cout << "Class already exists!!!" << std::endl;
+                                            break;
+                                        }
+                                        std::cout << "Class creation successful" << std::endl;
+                                        system("pause");
+                                        break;
+                            case 2 :    system("cls");
+                                        std::cout << "Enter class";
+                                        std::cin.sync();
+                                        std::cin.getline(neim,8);
+                                        op=data_append(neim);
+                                        if (op==(-1))
+                                        {
+                                            std::cout << "No such file in database" << std::endl;
+                                            break;
+                                        }
+                                        show_students(neim);
+                                        break;
+                            case 3 :    std::cout << "Enter class";
+                                        std::cin.sync();
+                                        char neim1[8];
+                                        std::cin.getline(neim1,8);
+                                        op=data_delete(neim1);
+                                        if (op==(-1))
+                                        {
+                                            std::cout << "No such file in database" << std::endl;
+                                            system("PAUSE");
+                                        }
+                                        show_students(neim);
+                                        break;
+                            case 4 :    std::cout << "Enter class (use numerals only)";
+                                        std::cin.getline(neim,8);
+                                        op=data_modify(neim);
+                                        if ( op==(-1))
+                                            std::cout << "Record not found ;__;" << std::endl;
+                                        break;
+                            case 5 :    std::cout << "Enter class (use numerals only)";
+                                        std::cin.getline(neim,8);
+                                        op=data_search(neim);
+                                        if(op==(-1))
+                                        {
+                                            std::cout << "No such file in database" << std::endl;
+                                            system("PAUSE");
+                                        }
+                                        else if(op==(-2))
+                                        {
+                                            std::cout << "Record not found" << std::endl;
+                                            system("PAUSE");
+                                        }
+                                        break;
+                            case 6 :    char ClassDel[10];
+                                        std::cout << "Enter class name to be deleted:" << std::endl;
+                                        std::cin.getline(ClassDel,10);
+                                        std::cout << "Deleting Class files.." << std::endl;
+                                        op=data_remove(ClassDel);
+                                        if(op==(-1))
+                                        {
+                                            std::cout << "No such class as '" << ClassDel << "'" << std::endl;
+                                        }
+                                        break;
+                            case 7 :    exit(0);
+                            default :   std::cout << "Wrong input!";
+                                        option=1;
+
+                        }
+
+                    }while(op!=0);
+                    break;
+        case 2 :    while (1)
+                    {
+                        system("cls");
+                        std::cout << "\t\t\t Enter the number to proceed to corresponding operation" << std::endl;
+                        std::cout
+                                << "1. Show Data"      << std::endl
+                                << "2. Append Data"    << std::endl
+                                << "3. Delete Data"    << std::endl
+                                << "4. Modify Data"    << std::endl
+                               << "5. Search Data"    << std::endl
+                               << "6. Exit"           << std::endl;
+                        int op;
+                        std::cin >> op;
+
+                        switch (op)
+                        {
+                            case 1 : {
+                                        system("cls");
+                            show_staff();
+                            continue;
+                            }
+        case 2 : {
+                    system("cls");
+                    op=staff_append();
+                    if (op==(-1))
+                    {
+                        std::cout << "No file in staff-base" << std::endl;
+                        break;
+                    }
+                    show_staff();
+
+                    continue;
+                 }
+        case 3 : {
+                    op=staff_delete();
+                    if (op==(-1))
+                    {
+                        std::cout << "No file in staff-base" << std::endl;
+                        system("PAUSE");
+                    }
+
+                    continue;
+                 }
+        case 4 : {
+                    op=staff_modify();
+                    if ( op==(-1))
+                    {
+                        std::cout << "Record not found ;__; \n";
+                    }
+                    show_staff();
+
+                    continue;
+                 }
+        case 5 :    op=staff_search();
+                    if(op==(-1))
+                    {
+                        std::cout << "No file in staff-base" << std::endl;
+                        system("PAUSE");
+                    }
+                    else if(op==(-2))
+                    {
+                        std::cout << "Record not found" << std::endl;
+                        system("PAUSE");
+                    }
+                    break;
+
+        case 6 : exit(0);
+
+        default : std::cout << "Wrong input!";
+                  option=1;
+                  break;
+    }
+}
             break;
-        case 2 :
-            break;
-        case 3 :
-            exit(0);
+        case 3 :    exit(0);
         default :
             std::cout<< "Wrong choice!" << std::endl;
             option=1;
