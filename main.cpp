@@ -68,7 +68,7 @@ int signup()
 */
 class stu
 {
-    uint32_t rollno;
+    int rollno;
     char Name[20];
     char Class[4];
     float marks;
@@ -116,6 +116,10 @@ public:
     {
         return rollno;
     }
+    void setRNO(int a)
+    {
+        rollno = a;
+    }
 } s1, stud ;
 
 int data_append(char* neim)
@@ -154,11 +158,12 @@ int data_delete(char* neim)
             found = 't';
             std::cout << " Are you sure, you want to delete this record? (y/n).. ";
             std::cin>> confirm ;
-            if (confirm == 'n')
+            if (((confirm == 'n') || (confirm == 'N') ) && (s1.getrno()!=-1))
                 file.write((char*)&s1,sizeof(stu));
         }
-        else
+        else if(s1.getrno()!=-1)
             file.write((char*)&s1,sizeof(stu));
+        s1.setRNO(-1);
     }
     if ( found == 'f' )
         std::cout << " Record not found ;__; \n";
@@ -319,6 +324,10 @@ public:
     {
         return empno;
     }
+    void setID(int a)
+    {
+        empno = a;
+    }
 } e1, emp ;
 
 int staff_append()
@@ -358,11 +367,12 @@ int staff_delete()
             found = 't';
             std::cout << " Are you sure, you want to delete this record? (y/n).. ";
             std::cin>> confirm ;
-            if (confirm == 'n')
+            if (((confirm == 'n') || (confirm == 'N') ) && (e1.getID()!=-1))
                 file.write((char*)&e1,sizeof(teacher));
         }
-        else
+        else if(e1.getID()!=-1)
             file.write((char*)&e1,sizeof(teacher));
+        e1.setID(-1);
     }
     if ( found == 'f' )
         std::cout << " Record not found ;__; \n";
