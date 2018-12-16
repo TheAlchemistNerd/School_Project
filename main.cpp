@@ -90,7 +90,8 @@ class stu
 
 public:
     void getdata()
-    {   int flag=0;
+    {
+        int flag=0;
         do
         {
             std::cout<<"Rollno :";
@@ -113,7 +114,8 @@ public:
                 system("PAUSE");
                 system("CLS");
             }
-        }while(flag);
+        }
+        while(flag);
 
     }
     void putdata()
@@ -332,7 +334,8 @@ class teacher
     }
 public:
     void getstaff()
-    {   int flag=0;
+    {
+        int flag=0;
         do
         {
             std::cout<<"Empno. :";
@@ -352,7 +355,8 @@ public:
                 system("PAUSE");
                 system("CLS");
             }
-        }while(flag);
+        }
+        while(flag);
     }
     void putstaff()
     {
@@ -627,12 +631,13 @@ int main()
                 std::cout << "\t\t\t Enter the number to proceed to corresponding operation" << std::endl;
                 std::cout
                         << "1. Create Class"   << std::endl
-                        << "2. Append Data"    << std::endl
-                        << "3. Delete Data"    << std::endl
-                        << "4. Modify Data"    << std::endl
-                        << "5. Search Record"  << std::endl
-                        << "6. Delete Class"   << std::endl
-                        << "7. Exit"           << std::endl;
+                        << "2. Show records"   << std::endl
+                        << "3. Append Data"    << std::endl
+                        << "4. Delete Data"    << std::endl
+                        << "5. Modify Data"    << std::endl
+                        << "6. Search Record"  << std::endl
+                        << "7. Delete Class"   << std::endl
+                        << "8. Exit"           << std::endl;
                 std::cin >> op;
                 switch (op)
                 {
@@ -657,6 +662,14 @@ int main()
                     std::cout << "Enter class";
                     std::cin.sync();
                     std::cin.getline(neim,8);
+                    show_students(neim);
+                    option=1;
+                    break;
+                case 3 :
+                    system("cls");
+                    std::cout << "Enter class";
+                    std::cin.sync();
+                    std::cin.getline(neim,8);
                     op=data_append(neim);
                     if (op==(-1))
                     {
@@ -668,7 +681,7 @@ int main()
                     show_students(neim);
                     option=1;
                     break;
-                case 3 :
+                case 4 :
                     std::cout << "Enter class";
                     std::cin.sync();
                     char neim1[8];
@@ -682,7 +695,7 @@ int main()
                     show_students(neim);
                     option=1;
                     break;
-                case 4 :
+                case 5 :
                     std::cout << "Enter class (use numerals only)";
                     std::cin.getline(neim,8);
                     op=data_modify(neim);
@@ -695,7 +708,7 @@ int main()
                     }
                     option=1;
                     break;
-                case 5 :
+                case 6 :
                     std::cout << "Enter class (use numerals only)";
                     std::cin.getline(neim,8);
                     op=data_search(neim);
@@ -711,7 +724,7 @@ int main()
                     }
                     option=1;
                     break;
-                case 6 :
+                case 7 :
                     char ClassDel[10];
                     std::cout << "Enter class name to be deleted:" << std::endl;
                     std::cin.getline(ClassDel,10);
@@ -723,7 +736,7 @@ int main()
                     }
                     option=1;
                     break;
-                case 7 :
+                case 8 :
                     exit(0);
                 default :
                     std::cout << "Wrong input!";
