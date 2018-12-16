@@ -90,20 +90,30 @@ class stu
 
 public:
     void getdata()
-    {
-        std::cout<<"Rollno :";
-        std::cin.sync();
-        std::cin>>rollno;
-        std::cout<<"Class :";
-        std::cin.sync();
-        std::cin>>Class;
-        std::cout<<"Name :";
-        std::cin.sync();
-        std::cin.getline(Name, 20);
-        std::cout<<"Marks :";
-        std::cin.sync();
-        std::cin>>marks;
-        grade=calcgrade(marks,grade);
+    {   int flag=0;
+        do
+        {
+            std::cout<<"Rollno :";
+            std::cin.sync();
+            std::cin>>rollno;
+            std::cout<<"Class :";
+            std::cin.sync();
+            std::cin>>Class;
+            std::cout<<"Name :";
+            std::cin.sync();
+            std::cin.getline(Name, 20);
+            std::cout<<"Marks :";
+            std::cin.sync();
+            std::cin>>marks;
+            grade=calcgrade(marks,grade);
+            if( !strlen(Name) || !strlen(Class) )                            // lets check for empty strings
+            {
+                std::cout << "Invalid name or class, try again" << std::endl;
+                flag=1;
+                system("PAUSE");
+                system("CLS");
+            }
+        }while(flag);
 
     }
     void putdata()
@@ -124,13 +134,28 @@ public:
 
 int data_append(char* neim)
 {
-    std::ofstream fi (neim, std::ios::binary | std::ios::app);
+    std::fstream fi (neim, std::ios::binary | std::ios::in);
     if (!fi)
     {
         return -1;
     }
     std::cout << "Enter details of student whose record is to be inserted" << std::endl;
     s1.getdata();
+    fi.seekg(0, std::ios::beg);
+    while(!fi.eof())
+    {
+        fi.read((char*)&stud,sizeof(stu));
+        if(stud.getrno()==s1.getrno())
+        {
+            std::cout << "Student with same roll number already exists" << std::endl;
+            system("PAUSE");
+            system("CLS");
+            fi.close();
+            return -2;
+        }
+    }
+    fi.close();
+    fi.open(neim, std::ios::out | std::ios::binary | std::ios::app);
     fi.write((char*)&s1,sizeof(stu));
     fi.close();
     return 0;
@@ -175,6 +200,11 @@ int data_delete(char* neim)
 }
 int data_modify(char* neim)
 {
+    std::ifstream check (neim, std::ios::in);
+    if (!check)
+    {
+        return -2;
+    }
     std::fstream fio(neim, std::ios::in | std::ios::out | std::ios::binary);
     int rno ;
     long pos ;
@@ -302,17 +332,27 @@ class teacher
     }
 public:
     void getstaff()
-    {
-        std::cout<<"Empno. :";
-        std::cin.sync();
-        std::cin>>empno;
-        std::cout<<"Role :";
-        std::cin.sync();
-        std::cin>>role;
-        std::cout<<"Name :";
-        std::cin.sync();
-        std::cin.getline(Name, 20);
-        salary=calcsal(role);
+    {   int flag=0;
+        do
+        {
+            std::cout<<"Empno. :";
+            std::cin.sync();
+            std::cin>>empno;
+            std::cout<<"Role :";
+            std::cin.sync();
+            std::cin>>role;
+            std::cout<<"Name :";
+            std::cin.sync();
+            std::cin.getline(Name, 20);
+            salary=calcsal(role);
+            if( !strlen(Name) || !strlen(role) )                              // lets check for empty strings
+            {
+                std::cout << "Invalid name or role, try again" << std::endl;
+                flag=1;
+                system("PAUSE");
+                system("CLS");
+            }
+        }while(flag);
     }
     void putstaff()
     {
@@ -332,13 +372,26 @@ public:
 
 int staff_append()
 {
-    std::ofstream fi ("staff", std::ios::app | std::ios::binary);
+    std::fstream fi ("staff", std::ios::in | std::ios::binary);
     if (!fi)
     {
         return -1;
     }
     std::cout << " Enter details of staff whose record is to be inserted \n ";
     e1.getstaff();
+    while(!fi.eof())
+    {
+        fi.read((char*)&emp,sizeof(teacher));
+        if(emp.getID()==e1.getID())
+        {
+            std::cout << "Employee with same emp number already exists" << std::endl;
+            system("PAUSE");
+            system("CLS");
+            return -2;
+        }
+    }
+    fi.close();
+    fi.open("staff", std::ios::out | std::ios::binary | std::ios::app);
     fi.write((char*)&e1, sizeof(teacher));
     fi.close();
     return 0;
@@ -385,6 +438,11 @@ int staff_delete()
 
 int staff_modify()
 {
+    std::ifstream check ("staff", std::ios::in);
+    if (!check)
+    {
+        return -2;
+    }
     std::fstream fio("staff", std::ios::in | std::ios::out | std::ios::binary);
     int rno ;
     long pos ;
@@ -439,6 +497,7 @@ int staff_search()
             e1.putstaff();
             found = 't';
             fi.close();
+            system("PAUSE");
         }
     }
     if ( found == 'f' )
@@ -591,6 +650,7 @@ int main()
                     }
                     std::cout << "Class creation successful" << std::endl;
                     system("pause");
+                    option=1;
                     break;
                 case 2 :
                     system("cls");
@@ -601,9 +661,12 @@ int main()
                     if (op==(-1))
                     {
                         std::cout << "No such file in database" << std::endl;
+                        system("PAUSE");
+                        option=1;
                         break;
                     }
                     show_students(neim);
+                    option=1;
                     break;
                 case 3 :
                     std::cout << "Enter class";
@@ -617,13 +680,20 @@ int main()
                         system("PAUSE");
                     }
                     show_students(neim);
+                    option=1;
                     break;
                 case 4 :
                     std::cout << "Enter class (use numerals only)";
                     std::cin.getline(neim,8);
                     op=data_modify(neim);
+
                     if ( op==(-1))
                         std::cout << "Record not found ;__;" << std::endl;
+                    if ( op==(-2))
+                    {
+                        std::cout << "No class data base \n";
+                    }
+                    option=1;
                     break;
                 case 5 :
                     std::cout << "Enter class (use numerals only)";
@@ -639,6 +709,7 @@ int main()
                         std::cout << "Record not found" << std::endl;
                         system("PAUSE");
                     }
+                    option=1;
                     break;
                 case 6 :
                     char ClassDel[10];
@@ -650,6 +721,7 @@ int main()
                     {
                         std::cout << "No such class as '" << ClassDel << "'" << std::endl;
                     }
+                    option=1;
                     break;
                 case 7 :
                     exit(0);
@@ -660,7 +732,7 @@ int main()
                 }
 
             }
-            while(op!=0);
+            while(option!=0);
             break;
         case 2 :
             while (1)
@@ -715,6 +787,10 @@ int main()
                     if ( op==(-1))
                     {
                         std::cout << "Record not found ;__; \n";
+                    }
+                    if ( op==(-2))
+                    {
+                        std::cout << "No staff data base \n";
                     }
                     show_staff();
 
