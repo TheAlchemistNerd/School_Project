@@ -1,9 +1,9 @@
 #include <fstream>
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <process.h>
-#include <string.h>
+#include <cstring>
 
 class Login
 {
@@ -376,27 +376,29 @@ public:
 
 int staff_append()
 {
-    std::fstream fi ("staff", std::ios::in | std::ios::binary);
+    std::fstream fi ("staff", std::ios::binary | std::ios::in);
     if (!fi)
     {
-        return -1;
+        std::cout << "No file, creating file..." << std::endl;
     }
-    std::cout << " Enter details of staff whose record is to be inserted \n ";
+    std::cout << "Enter details of student whose record is to be inserted" << std::endl;
     e1.getstaff();
+    fi.seekg(0, std::ios::beg);
     while(!fi.eof())
     {
         fi.read((char*)&emp,sizeof(teacher));
         if(emp.getID()==e1.getID())
         {
-            std::cout << "Employee with same emp number already exists" << std::endl;
+            std::cout << "Student with same roll number already exists" << std::endl;
             system("PAUSE");
             system("CLS");
+            fi.close();
             return -2;
         }
     }
     fi.close();
     fi.open("staff", std::ios::out | std::ios::binary | std::ios::app);
-    fi.write((char*)&e1, sizeof(teacher));
+    fi.write((char*)&e1,sizeof(teacher));
     fi.close();
     return 0;
 }
@@ -516,6 +518,7 @@ void show_staff()
     if(!fi)
     {
         std::cout << "No staff-base found" << std::endl;
+        system("pause");
         return;
     }
     std::cout << "File now contains : \n";
@@ -697,6 +700,7 @@ int main()
                     break;
                 case 5 :
                     std::cout << "Enter class (use numerals only)";
+                    std::cin.sync();
                     std::cin.getline(neim,8);
                     op=data_modify(neim);
 
@@ -707,9 +711,11 @@ int main()
                         std::cout << "No class data base \n";
                     }
                     option=1;
+                    system("pause");
                     break;
                 case 6 :
                     std::cout << "Enter class (use numerals only)";
+                    std::cin.sync();
                     std::cin.getline(neim,8);
                     op=data_search(neim);
                     if(op==(-1))
@@ -723,16 +729,19 @@ int main()
                         system("PAUSE");
                     }
                     option=1;
+                    system("PAUSE");
                     break;
                 case 7 :
                     char ClassDel[10];
                     std::cout << "Enter class name to be deleted:" << std::endl;
+                    std::cin.sync();
                     std::cin.getline(ClassDel,10);
                     std::cout << "Deleting Class files.." << std::endl;
                     op=data_remove(ClassDel);
                     if(op==(-1))
                     {
                         std::cout << "No such class as '" << ClassDel << "'" << std::endl;
+                        system("PAUSE");
                     }
                     option=1;
                     break;
@@ -740,6 +749,7 @@ int main()
                     exit(0);
                 default :
                     std::cout << "Wrong input!";
+                    system("PAUSE");
                     option=1;
 
                 }
@@ -750,6 +760,7 @@ int main()
         case 2 :
             while (1)
             {
+                system("pause");
                 system("cls");
                 std::cout << "\t\t\t Enter the number to proceed to corresponding operation" << std::endl;
                 std::cout
@@ -768,6 +779,7 @@ int main()
                 {
                     system("cls");
                     show_staff();
+                    system("PAUSE");
                     continue;
                 }
                 case 2 :
